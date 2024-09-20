@@ -1,0 +1,27 @@
+1. Cài đặt Redis và khởi chạy Redis
+
+2. Tạo môi trường ảo python
+	
+	virtualenv env
+
+3. Kích hoạt môi trường ảo:
+	
+	env\Scripts\activate
+
+4. Cài đặt thư viện của camera_core (phần camera nhận diện khuôn mặt)
+
+	pip install -r ./camera_core/requirements.txt
+
+5. Cài đặt thư viện của student_management_sys (phần hệ thống web quản lý vật dụng cho mượn)
+
+	pip install -r ./student_management_sys/requirements.txt
+
+6. Khởi chạy phần camera
+
+	python ./camera_core/face_rec_cam.py
+
+7. KHởi chạy phần web quản lý (tạo terminal mới chạy song song với camera)
+
+	python ./student_management_sys/manage.py runserver
+
+8. Sử dụng
