@@ -1,0 +1,213 @@
+{% extends "api/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Thông Tin Môn Học</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="multi-filter-select" class="display table table-striped table-hover">
+
+                        <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td>{{ subject.id}}</td>
+                            </tr>
+                            <tr>
+                                <td>Tên Môn Học</td>
+                                <td>{{ subject.subject_name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2>Danh Sách Vật Dụng</h2>
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Tên Loại Vật Dụng</th>
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for item in subject_item_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ item.category_name }}</td>
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-item-subject-detail' subject.id item.id  %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <h2>Danh Sách Buổi Học</h2>
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Ngày</th>
+                                <th style="text-align: center;">Giờ Bắt Dầu</th>
+                                <th style="text-align: center;">Giờ Kết Thúc</th>
+
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for sub_class in subject_class_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ sub_class.date|date:'l d-m-Y' }}</td>
+                                <td style="text-align: center;">{{ sub_class.start_time|time:'H:i:s' }}</td>
+                                <td style="text-align: center;">{{ sub_class.end_time|time:'H:i:s' }}</td>
+
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-class-subject-detail' sub_class.id  %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <h2>Danh Sách Học Sinh</h2>
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Họ và tên</th>
+                                <th style="text-align: center;">Mã Sinh Viên</th>
+                                <th style="text-align: center;">Email</th>
+
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for student in subject_student_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ student.full_name }}</td>
+                                <td style="text-align: center;">{{ student.student_code }}</td>
+                                <td style="text-align: center;">{{ student.email }}</td>
+
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-student-subject-detail' subject.id student.id  %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Thêm Vật Dụng</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'add-item-subject-detail' subject_id=subject.id  %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="defaultSelect">Chọn Vật Dụng</label>
+                                <select class="form-control form-control" id="defaultSelect" name="item-category-id">
+                                    <option selected>Chọn Loại Vật Dụng</option>
+                                    {% for category in item_option_input_list %}
+                                        <option value="{{ category.id }}">{{ category.category_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Thêm Sinh Viên</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'add-student-subject-detail' subject_id=subject.id  %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="defaultSelect">Chọn Sinh Viên</label>
+                                <select class="form-control form-control" id="defaultSelect" name="student-id">
+                                    <option selected>Chọn Sinh Viên</option>
+                                    {% for stu in student_option_input_list %}
+                                        <option value="{{ stu.id }}">{{ stu.full_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Buổi Học</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'add-class-subject-detail' subject_id=subject.id  %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="largeInput">Ngày</label>
+                                <input type="date" class="form-control form-control" id="defaultInput" placeholder="Ngày" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="largeInput">Giờ Bắt Đầu</label>
+                                <input type="time" class="form-control form-control" id="defaultInput" placeholder="Start Time" name="start-time" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="largeInput">Giờ Kết Thúc</label>
+                                <input type="time" class="form-control form-control" id="defaultInput" placeholder="End Time" name="end-time" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

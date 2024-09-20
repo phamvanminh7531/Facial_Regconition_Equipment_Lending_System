@@ -1,0 +1,177 @@
+{% extends "api/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    
+                    <h4 class="card-title">Danh Sách Loại Vật Dụng</h4>
+                    <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowItemCategoryModal">
+                        <i class="fa fa-plus"></i>
+                        Thêm Loại Vật Dụng
+                    </button>
+                </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Tên Loại Vật Dụng</th>
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for category in item_category_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ category.category_name }}</td>
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-item-category' category.id %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    
+                    <h4 class="card-title">Danh Sách Vật Dụng</h4>
+                    <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowItemModal">
+                        <i class="fa fa-plus"></i>
+                        Thêm Vật Dụng
+                    </button>
+                </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="item-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Tên Vật Dụng</th>
+                                <th style="text-align: center;">Loại Vật Dụng</th>
+                                <th style="text-align: center;">QR Code</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for item in item_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ item.item_name }}</td>
+                                <td style="text-align: center;">{{ item.category.category_name }}</td>
+                                <td style="text-align: center;">{{ item.item_name }}</td>
+                                <td style="text-align: center;">{{ item.status }}</td>
+                                <td style="text-align: center;"><a target="_blank" href="{{ item.qr_code_img.url }}">@QRCode</a></td>
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-item' item.id %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Item Category -->
+<div class="modal fade" id="addRowItemCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Loại Vật Dụng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="{% url 'add-item-category' %}">
+                <div class="modal-body">
+                    
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="largeInput">Tên Loại Vật Dụng</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Tên Loại Vật Dụng" name="category-name" required>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Item -->
+<div class="modal fade" id="addRowItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Vật Dụng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="{% url 'add-item' %}">
+                <div class="modal-body">
+                    
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="largeInput">Tên Vật Dụng</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Tên Loại Vật Dụng" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Example select</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="type">
+                                <option selected>Chọn Loại Vật Dụng</option>
+                                {% for category in item_category_list %}
+                                    <option value="{{ category.id }}">{{ category.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

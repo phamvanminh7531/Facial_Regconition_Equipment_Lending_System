@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Hệ Thống Quản Lý Thiết Bị Cho Mượn</title>
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="{% static 'image/icon.ico' %}" type="image/x-icon"/>
+
+	<!-- Fonts and icons -->
+	<script src="{% static 'js/plugin/webfont/webfont.min.js' %}"></script>
+	<script>
+		var staticURL = "{% static 'css/fonts.min.css' %}";
+		WebFont.load({
+			google: {"families":["Lato:300,400,700,900"]},
+			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: [staticURL]},
+			active: function() {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/atlantis.min.css' %}">
+	
+
+</head>
+<body>
+	<div class="wrapper">
+		<div class="main-header">
+			<!-- Logo Header -->
+			<div class="logo-header" data-background-color="blue">
+				
+				<a href="{% url 'item-borrow-list' %}" class="logo">
+					<img src="{% static 'image/nav_brand_logo.png' %}" alt="navbar brand" class="navbar-brand">
+				</a>
+				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon">
+						<i class="icon-menu"></i>
+					</span>
+				</button>
+				<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+				<div class="nav-toggle">
+					<button class="btn btn-toggle toggle-sidebar">
+						<i class="icon-menu"></i>
+					</button>
+				</div>
+			</div>
+			<!-- End Logo Header -->
+
+			<!-- Navbar Header -->
+			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+				
+				<div class="container-fluid">
+
+				</div>
+			</nav>
+			<!-- End Navbar -->
+		</div>
+
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+				<div class="sidebar-content">
+					<ul class="nav nav-primary">
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Components</h4>
+						</li>
+
+						<li class="nav-item">
+							<a href="{% url 'item-borrow-list' %}">
+								<i class="fas fa-desktop"></i>
+								<p>Danh Sách Thiết Bị Cho Mượn</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{% url 'student-list' %}">
+								<i class="fas fa-graduation-cap"></i>
+								<p>Danh Sách Sinh Viên</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{% url 'item-list' %}">
+								<i class="fas fa-compass-drafting"></i>
+								<p>Danh Sách Vật Dụng</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{% url 'subject-list' %}">
+								<i class="fas fa-book"></i>
+								<p>Danh Sách Môn Học</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					{% block content %}
+					{% endblock %}
+				</div>
+			</div>
+			
+			
+			
+			
+		</div>
+	</div>
+	<!--   Core JS Files   -->
+	<script src="{% static 'js/core/jquery.3.2.1.min.js'%}"></script>
+	<script src="{% static 'js/core/popper.min.js'%}"></script>
+	<script src="{% static 'js/core/bootstrap.min.js'%}"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js" integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+	<!-- jQuery UI -->
+	<script src="{% static 'js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js'%}"></script>
+	<script src="{% static 'js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js'%}"></script>
+
+	<!-- jQuery Scrollbar -->
+	<script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js'%}"></script>
+	
+	<!-- Atlantis JS -->
+	<script src="{% static 'js/atlantis.min.js'%}"></script>
+
+
+
+	{% block js %}
+	{% endblock %}
+
+</body>
+</html>

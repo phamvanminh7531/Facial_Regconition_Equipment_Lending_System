@@ -1,0 +1,91 @@
+{% extends "api/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    
+                    <h4 class="card-title">Danh Sách Môn Học</h4>
+                    <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowSubjectModal">
+                        <i class="fa fa-plus"></i>
+                        Thêm Môn Học
+                    </button>
+                </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Tên Môn Học</th>
+
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for subject in subject_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ subject.subject_name }}</td>
+
+                                <td style="text-align: center;">
+                                    <!-- CHI TIẾT -->
+                                    <a  href="{% url 'subject-detail' subject.id %}" >
+                                        <i style="color:green;" class="fa-solid fa-pen-to-square fa-lg"></i>
+                                    </a>
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-subject' subject.id %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Subject -->
+<div class="modal fade" id="addRowSubjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Môn Học</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="{% url 'add-subject' %}">
+                <div class="modal-body">
+                    
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="largeInput">Hạ Và Tên</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Tên Môn Học" name="subject-name" required>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "api/base.html" %}
+{% load static %}
+{% block content %}
+
+<div id="app" class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Danh Sách Thiết Bị Cho Mượn</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover" >
+                        <thead class="bg-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>ID</th>
+                                <th>Student Code</th>
+                                <th>Item Name</th>
+                                <th>Date</th>
+                                <th>Borrow Time</th>
+                                <th>Return Time</th>
+                                <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(item_borrow, index) in item_borrows">
+                                <td>
+                                    <p class="fw-normal mb-1">[[index + 1]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.id ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.student.student_code ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.item.item_name ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.date ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.borrow_time ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.return_time ]]</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1">[[ item_borrow.status ]]</p>
+                                </td>
+                            </tr>
+                          </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+    <script>
+    vueApp = new Vue({
+        el: "#app",
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                item_borrows: [],
+            };
+        },
+
+        methods: {
+            dateSort(a, b) {
+            let date1 = new Date(a.date).getTime();
+            
+            let date2 = new Date(b.date).getTime();
+            
+            return date1 - date2;
+            },
+
+            nameLength (row) {
+                console.log(row);
+                return row.name.length
+            },
+
+            
+        }
+
+
+    });
+    var serverIp = window.location.hostname;
+    var wsUrl = "ws://" + serverIp + ":8000/ws/";
+    var ws = new WebSocket(wsUrl);
+
+    ws.onopen = function (e) {
+        ws.send(
+        JSON.stringify({
+            action: "list",
+            request_id: new Date().getTime(),
+        })
+        );
+    };
+
+    ws.onmessage = function (e) {
+        allData = JSON.parse(e.data);
+        console.log(allData);
+        
+        if (allData.action === "list") {
+        vueApp.$data.item_borrows = allData.data;
+        vueApp.$forceUpdate();
+        console.log(vueApp.$data.item_borrows[0].id);
+
+        } else if (allData.action === "create") {
+        vueApp.$data.item_borrows.push(allData.data);
+        console.log(allData.data);
+        
+        } else if (allData.action === "update"){
+
+        // console.log(allData.data);
+
+        
+        objIndex = vueApp.$data.item_borrows.findIndex((obj => obj.id == allData.data.id));
+        
+        vueApp.$data.item_borrows[objIndex].status = allData.data.status;
+
+        } else if (allData.action === "delete"){
+        
+        objIndex = vueApp.$data.item_borrows.findIndex((obj => obj.id == allData.data.id));
+
+        vueApp.$data.item_borrows.splice(objIndex, 1);
+
+        console.log(vueApp.$data.item_borrows);
+
+        }
+    };
+    </script>
+
+{% endblock %}

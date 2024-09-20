@@ -1,0 +1,99 @@
+{% extends "api/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    
+                    <h4 class="card-title">Danh Sách Sinh Viên</h4>
+                    <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowSinhVienModal">
+                        <i class="fa fa-plus"></i>
+                        Thêm Sinh Viên
+                    </button>
+                </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Họ và tên</th>
+                                <th style="text-align: center;">Mã Sinh Viên</th>
+                                <th style="text-align: center;">Email</th>
+
+                                <th style="text-align: center;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for student in student_list %}
+                            <tr>
+                                <td style="text-align: center;">{{ forloop.counter }}</td>
+                                <td style="text-align: center;">{{ student.full_name }}</td>
+                                <td style="text-align: center;">{{ student.student_code }}</td>
+                                <td style="text-align: center;">{{ student.email }}</td>
+
+                                <td style="text-align: center;">
+                                    <!-- XÓA -->
+                                    <a  style="margin-left: 10px;" href="{% url 'delete-student' student.id %}"  >
+                                        <i style="color:red;" class="fa-solid fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Student -->
+<div class="modal fade" id="addRowSinhVienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Sinh Viên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="{% url 'add-student' %}">
+                <div class="modal-body">
+                    
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="largeInput">Họ Và Tên</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Tên Sinh Viên" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="largeInput">Mã Số Sinh Viên</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Mã Số Sinh Viên" name="code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="largeInput">Email</label>
+                            <input type="text" class="form-control form-control" id="defaultInput" placeholder="Email" name="email" >
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <button type="submit" class="form-control form-control btn btn-primary">Thêm</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
